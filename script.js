@@ -6,12 +6,24 @@ let investements = [
         currentValue: 1200
     }
 ];
+//loading the investement from the local page
+window.addEventListener('load' , () => {
+    const storeInvestement = localStorage.getItem('investement');
+    if(storeInvestement){
+        investements = JSON.parse(storeInvestement);
+        }
+        display(); //Display the loaded investements
+})
 console.log(investements);
 let makeAddVisibleToggle = true;
 let makeUpdateVisibleToggle = true;
 let makeVisualizeToggle = false;
-display();
+
+function storeInvestement() {
+    localStorage.setItem('investement', JSON.stringify(investements));
+}
 //making the user to only update/to add value
+
 
 function makeAddVisible() {
     if (makeAddVisibleToggle) {
@@ -36,6 +48,7 @@ function add() {
     };
     //get the investement into the array which will be utilized to display information
     investements.push(investement);
+    storeInvestement();
     //checking the data stored
     console.log(investements);
     //rendering the information into the table
@@ -166,7 +179,7 @@ function updateCurrentValue(id) {
     const investement = investements[id];
     // Update the current value of the selected investment entry
     investement.currentValue = parseFloat(updateFormCurrentValue.value);
-
+    storeInvestement();
     // Re-render the table to reflect the updated current value
     display();
 
@@ -185,7 +198,7 @@ function removeEntry(id) {
 
     // Re-map the remaining investments to adjust their IDs after removal
     investements.forEach((investement, index) => investement.id = index);
-
+    storeInvestement();
     // Re-render the table with the updated investments list
     display();
 }
